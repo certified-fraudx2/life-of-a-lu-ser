@@ -85,7 +85,7 @@
         .retro-sidebar-btn {
             background: linear-gradient(180deg, #627756 0%, #4c6041 100%);
             border: 2px solid #8ca280;
-            box-shadow: none; /* Shadow removed per request */
+            box-shadow: none;
             color: #f3f8f0;
             border-radius: 0.75rem;
             transition: all 0.15s ease;
@@ -99,7 +99,7 @@
         .retro-sidebar-btn.active {
             background: linear-gradient(180deg, #e07a5f 0%, #c85a3d 100%);
             border-color: #f4a261;
-            box-shadow: none; /* Shadow removed per request */
+            box-shadow: none;
             color: #ffffff;
         }
 
@@ -200,13 +200,12 @@
     <!-- MAIN STATIONARY BROWSER WINDOW -->
     <div id="browser-win" class="win-soft w-full max-w-6xl mx-auto h-[calc(100vh-4rem)] flex flex-col my-auto relative z-10 overflow-hidden">
         
-        <!-- Stationary Title Bar (Non-movable) -->
+        <!-- Stationary Title Bar -->
         <div class="win-titlebar-soft px-3 py-2 flex justify-between items-center shrink-0">
             <div class="flex items-center gap-2 text-xs md:text-sm font-bold truncate">
                 <i class="fa-solid fa-compass text-amber-300"></i>
                 <span id="browser-title">Life of a Lu-ser - [Official Webcomic Browser]</span>
             </div>
-            <!-- Window Control Buttons Removed -->
         </div>
 
         <!-- Browser Navigation Bar -->
@@ -316,7 +315,7 @@
 
         <!-- Audio & Clock Controls -->
         <div class="win-inset-soft px-3 py-1 text-xs flex items-center gap-3 bg-[#f2f7ef] font-mono text-[#2b3a23]">
-            <button onclick="toggleSound()" id="sound-btn" title="Toggle Beep Audio FX" class="hover:text-emerald-800">
+            <button onclick="toggleSound()" id="sound-btn" title="Toggle Sound FX" class="hover:text-emerald-800">
                 <i class="fa-solid fa-volume-high"></i>
             </button>
             <span id="clock-display" class="font-bold">00:00 AM</span>
@@ -328,12 +327,65 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        /*
-         * MULTI-FILE URL ROUTING HELPERS:
-         * To separate chapters into dedicated .html files (e.g. index.html, ch1.html, ch2.html, ch3.html, bios.html):
-         * 1. You can replace loadPage('ch1') with direct HTML link navigation: `window.location.href = 'ch1.html';`
-         * 2. In each standalone file (ch1.html, ch2.html, bios.html), simply set `currentChapterKey` to match that specific page.
-         */
+        // GLOBAL STATE
+        let currentChapterKey = 'home';
+        let currentPageIdx = 0;
+        let soundEnabled = true;
+        let audioCtx = null;
+
+        // SOUND SYNTHESIZER
+        function playBeep(freq = 600, duration = 0.04) {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                // Audio context fallback
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('sound-btn');
+            if (soundEnabled) {
+                btn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+                playBeep(800, 0.05);
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-volume-xmark text-red-500"></i>';
+            }
+        }
+
+        // CONTENT WARNING GATE ACTIONS
+        function acceptWarningAndEnter() {
+            playBeep(750, 0.04);
+            const warningGate = document.getElementById('content-warning-gate');
+            if (warningGate) {
+                warningGate.style.display = 'none';
+            }
+        }
+
+        function kickUserOut() {
+            playBeep(300, 0.08);
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = "https://www.google.com";
+            }
+        }
 
         // WEBCOMIC CHAPTER & PAGE DATA STRUCTURE
         const COMIC_DATA = {
@@ -366,6 +418,52 @@
                         bg: "from-[#e2ebd9] to-[#c5d8ba]",
                         svgType: "ch1_p2"
                     },
+                    {
+                        num: 3,
+                        title: "Page 3: Into the Glitch",
+                        dialogue: "Rabbi: 'Be careful! The textures over there haven't loaded since 1999!'",
+                        bg: "from-[#2d3e2f] to-[#1b261d]",
+                        svgType: "ch1_p3"
+                    }
+                ]
+            },
+            ch2: {
+                title: "Chapter 2: The Glitch Incident",
+                url: "github.com/life-of-a-lu-ser/webcomic/ch2.html",
+                type: "comic",
+                pages: [
+                    {
+                        num: 1,
+                        title: "Page 1: Texture Decay",
+                        dialogue: "My: 'The trees... they turned into low-poly pastel boxes?'",
+                        bg: "from-[#382b3d] to-[#1f1924]",
+                        svgType: "ch2_p1"
+                    },
+                    {
+                        num: 2,
+                        title: "Page 2: Code Corridors",
+                        dialogue: "Casey: 'Look! An old admin console. Maybe we can patch it before server reset!'",
+                        bg: "from-[#223326] to-[#111c13]",
+                        svgType: "ch2_p2"
+                    }
+                ]
+            },
+            ch3: {
+                title: "Chapter 3: Cyber Midnight",
+                url: "github.com/life-of-a-lu-ser/webcomic/ch3.html",
+                type: "comic",
+                pages: [
+                    {
+                        num: 1,
+                        title: "Page 1: The Midnight Reset",
+                        dialogue: "Rabbi: 'If the server restarts now, will our avatars be saved?'",
+                        bg: "from-[#1a2332] to-[#0c121c]",
+                        svgType: "ch3_p1"
+                    }
+                ]
+            }
+        };
+
         // Navigation & Loader Dispatcher
         function loadPage(chapterKey, pageIndex = 0) {
             playBeep(700, 0.03);
@@ -692,26 +790,6 @@
             loadPage('home');
         }
 
-        // CONTENT WARNING GATE ACTIONS
-        function acceptWarningAndEnter() {
-            playBeep(750, 0.04);
-            const warningGate = document.getElementById('content-warning-gate');
-            if (warningGate) {
-                warningGate.style.display = 'none';
-            }
-        }
-
-        function kickUserOut() {
-            playBeep(300, 0.08);
-            // If the user has history to go back to, use history.back()
-            if (window.history.length > 1) {
-                window.history.back();
-            } else {
-                // Otherwise redirect them completely away
-                window.location.href = "https://www.google.com";
-            }
-        }
-
         // KEYBOARD EVENT LISTENER
         window.addEventListener('keydown', function(e) {
             if (e.key === 'ArrowLeft') {
@@ -728,7 +806,8 @@
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const ampm = hours >= 12 ? 'PM' : 'AM';
             hours = hours % 12 || 12;
-            document.getElementById('clock-display').innerText = `${hours}:${minutes} ${ampm}`;
+            const clockEl = document.getElementById('clock-display');
+            if (clockEl) clockEl.innerText = `${hours}:${minutes} ${ampm}`;
         }
         setInterval(updateClock, 1000);
 
