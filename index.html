@@ -85,7 +85,7 @@
         .retro-sidebar-btn {
             background: linear-gradient(180deg, #627756 0%, #4c6041 100%);
             border: 2px solid #8ca280;
-            box-shadow: 0 3px 0 #2e3c27;
+            box-shadow: none; /* Shadow removed per request */
             color: #f3f8f0;
             border-radius: 0.75rem;
             transition: all 0.15s ease;
@@ -99,7 +99,7 @@
         .retro-sidebar-btn.active {
             background: linear-gradient(180deg, #e07a5f 0%, #c85a3d 100%);
             border-color: #f4a261;
-            box-shadow: inset 1px 2px 4px rgba(0,0,0,0.3);
+            box-shadow: none; /* Shadow removed per request */
             color: #ffffff;
         }
 
@@ -136,9 +136,66 @@
         .animate-bounce-gentle {
             animation: gentleBounce 3.5s ease-in-out infinite;
         }
+
+        /* Horror Warning Glitch Animation */
+        @keyframes horrorFlicker {
+            0%, 100% { opacity: 1; text-shadow: 0 0 5px #ff2a2a, 0 0 10px #ff0000; }
+            50% { opacity: 0.85; text-shadow: 0 0 2px #ff2a2a; }
+            52% { opacity: 0.4; }
+            54% { opacity: 1; }
+        }
+        .horror-title {
+            animation: horrorFlicker 2s infinite;
+        }
     </style>
 </head>
 <body class="desktop-bg relative select-none flex flex-col justify-between h-screen w-screen p-2 md:p-4">
+
+    <!-- 18+ MATURE CONTENT / HORROR WARNING OVERLAY GATE -->
+    <div id="content-warning-gate" class="fixed inset-0 bg-[#0a0d08] z-[9999] flex justify-center items-center p-4">
+        <div class="win-soft w-full max-w-lg bg-[#141c13] border-2 border-red-900 shadow-[0_0_50px_rgba(220,38,38,0.25)] rounded-2xl overflow-hidden flex flex-col">
+            
+            <!-- Warning Header -->
+            <div class="bg-gradient-to-r from-red-950 via-zinc-900 to-red-950 px-4 py-3 border-b-2 border-red-800/60 flex items-center gap-2">
+                <i class="fa-solid fa-triangle-exclamation text-red-500 text-lg animate-pulse"></i>
+                <span class="text-red-400 font-extrabold text-xs md:text-sm tracking-widest uppercase font-mono">System Warning — 18+ Restricted</span>
+            </div>
+
+            <!-- Warning Body Content -->
+            <div class="p-5 flex flex-col gap-4 text-center items-center">
+                <div class="w-16 h-16 rounded-full bg-red-950/60 border-2 border-red-600/50 flex justify-center items-center text-red-500 text-2xl shadow-[inset_0_0_15px_rgba(239,68,68,0.3)]">
+                    <i class="fa-solid fa-skull"></i>
+                </div>
+
+                <h2 class="text-red-500 font-extrabold text-base md:text-lg horror-title uppercase tracking-wide">
+                    Content Advisory & Age Verification
+                </h2>
+
+                <div class="win-inset-soft bg-[#0c120a] border-red-900/50 p-3.5 text-xs text-red-200/90 leading-relaxed text-left font-mono space-y-2">
+                    <p>• <b class="text-red-400">MATURE THEMES:</b> "Life of a Lu-ser" contains psychological horror elements, surreal imagery, disturbing glitch aesthetics, and adult themes not suitable for sensitive or underage viewers.</p>
+                    <p>• <b class="text-red-400">AGE RESTRICTION:</b> You must be at least <b>18 years of age</b> or older to view this content.</p>
+                </div>
+
+                <p class="text-[11px] text-zinc-400 font-semibold">
+                    Do you confirm that you are 18+ and wish to proceed into the comic archives?
+                </p>
+
+                <!-- Gate Choice Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-3 w-full mt-2">
+                    <button onclick="kickUserOut()" class="flex-1 py-2.5 px-4 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-extrabold text-xs rounded-xl border border-zinc-600 transition flex justify-center items-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i> No, Exit / Go Back
+                    </button>
+                    <button onclick="acceptWarningAndEnter()" class="flex-1 py-2.5 px-4 bg-red-800 hover:bg-red-700 text-white font-extrabold text-xs rounded-xl border border-red-500 shadow-[0_0_15px_rgba(220,38,38,0.4)] transition flex justify-center items-center gap-2">
+                        <i class="fa-solid fa-check"></i> Yes, I am 18+ (Enter)
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-[#090d08] p-2 text-center text-[10px] text-zinc-500 border-t border-red-950 font-mono">
+                [SECURE CHECKPOINT // LIFE-OF-A-LU-SER ROOT ARCHIVE]
+            </div>
+        </div>
+    </div>
 
     <!-- MAIN STATIONARY BROWSER WINDOW -->
     <div id="browser-win" class="win-soft w-full max-w-6xl mx-auto h-[calc(100vh-4rem)] flex flex-col my-auto relative z-10 overflow-hidden">
@@ -149,12 +206,7 @@
                 <i class="fa-solid fa-compass text-amber-300"></i>
                 <span id="browser-title">Life of a Lu-ser - [Official Webcomic Browser]</span>
             </div>
-            <!-- Window Control Buttons (Soft Pill-like) -->
-            <div class="flex items-center gap-1.5">
-                <button onclick="showToast('Life of a Lu-ser Browser is stationary.')" class="w-6 h-6 rounded-full bg-amber-400 text-amber-950 text-xs font-bold flex items-center justify-center hover:brightness-110">_</button>
-                <button onclick="showToast('Maximizing is locked to maintain layout.')" class="w-6 h-6 rounded-full bg-emerald-400 text-emerald-950 text-xs font-bold flex items-center justify-center hover:brightness-110">□</button>
-                <button onclick="showToast('Thank you for reading Life of a Lu-ser!')" class="w-6 h-6 rounded-full bg-rose-400 text-rose-950 text-xs font-bold flex items-center justify-center hover:brightness-110">✕</button>
-            </div>
+            <!-- Window Control Buttons Removed -->
         </div>
 
         <!-- Browser Navigation Bar -->
@@ -162,9 +214,6 @@
             <div class="flex items-center gap-1">
                 <button onclick="navigateHome()" class="win-btn-soft px-2.5 py-1 text-xs flex items-center gap-1 font-semibold" title="Home">
                     <i class="fa-solid fa-house text-emerald-700"></i> Home
-                </button>
-                <button onclick="reloadCurrentPage()" class="win-btn-soft px-2.5 py-1 text-xs flex items-center gap-1 font-semibold" title="Refresh">
-                    <i class="fa-solid fa-arrows-rotate text-emerald-700"></i> Refresh
                 </button>
             </div>
 
@@ -174,10 +223,6 @@
                 <span class="text-gray-400 select-none">https://</span>
                 <input id="url-input" type="text" value="github.com/life-of-a-lu-ser/webcomic" class="w-full text-xs outline-none bg-transparent font-mono text-gray-700" readonly />
             </div>
-
-            <a href="https://github.com" target="_blank" class="win-btn-soft px-3 py-1 text-xs font-bold text-gray-700 flex items-center gap-1">
-                <i class="fa-brands fa-github text-sm"></i> GitHub Repo
-            </a>
         </div>
 
         <!-- BROWSER CONTENT BODY (SIDEBAR + MAIN DISPLAY) -->
@@ -189,16 +234,13 @@
                 <!-- Avatar & Webcomic Title Banner -->
                 <div class="bg-[#f0f5ed] p-3 text-center rounded-xl border-2 border-[#9bb090] shadow-sm flex flex-col items-center">
                     <svg class="w-16 h-16 animate-bounce-gentle" viewBox="0 0 100 100">
-                        <!-- Sage Green Cat/Frog Mask Character (Lu-ser Protagonist) -->
                         <polygon points="20,40 35,12 48,35" fill="#8ca07e" stroke="#2b3a23" stroke-width="3"/>
                         <polygon points="80,40 65,12 52,35" fill="#8ca07e" stroke="#2b3a23" stroke-width="3"/>
                         <circle cx="50" cy="55" r="34" fill="#a4b896" stroke="#2b3a23" stroke-width="3"/>
-                        <!-- Sleepy Expressive Eyes -->
                         <ellipse cx="38" cy="52" rx="6" ry="8" fill="#2b3a23"/>
                         <ellipse cx="62" cy="52" rx="6" ry="8" fill="#2b3a23"/>
                         <circle cx="36" cy="50" r="2" fill="#fff"/>
                         <circle cx="60" cy="50" r="2" fill="#fff"/>
-                        <!-- Snout & Mouth -->
                         <polygon points="50,60 45,64 55,64" fill="#e07a5f"/>
                         <path d="M 42,68 Q 50,74 58,68" fill="transparent" stroke="#2b3a23" stroke-width="3"/>
                         <line x1="12" y1="52" x2="28" y2="54" stroke="#2b3a23" stroke-width="2"/>
@@ -228,11 +270,8 @@
                     <button id="nav-ch3" onclick="loadPage('ch3')" class="retro-sidebar-btn text-left px-3 py-2 text-xs font-extrabold flex items-center gap-2">
                         <i class="fa-solid fa-book-open"></i> Ch. 3: Cyber Midnight
                     </button>
-                    <button id="nav-[#3d4c35]" onclick="openBiosModal()" class="retro-sidebar-btn text-left px-3 py-2 text-xs font-extrabold flex items-center gap-2">
+                    <button id="nav-bios" onclick="loadPage('bios')" class="retro-sidebar-btn text-left px-3 py-2 text-xs font-extrabold flex items-center gap-2">
                         <i class="fa-solid fa-users"></i> Character Bios
-                    </button>
-                    <button id="nav-about" onclick="loadPage('about')" class="retro-sidebar-btn text-left px-3 py-2 text-xs font-extrabold flex items-center gap-2">
-                        <i class="fa-solid fa-circle-info"></i> Author & Lore
                     </button>
                 </div>
 
@@ -262,10 +301,11 @@
     <!-- BOTTOM SYSTEM TASKBAR -->
     <div class="w-full max-w-6xl mx-auto mt-2 h-10 win-soft flex items-center px-2 justify-between z-40 shrink-0">
         <div class="flex items-center gap-2 h-full py-1">
-            <button onclick="toggleStartMenu()" class="win-btn-soft px-3 h-full font-extrabold flex items-center gap-2 text-xs">
+            <!-- Non-interactable Start Button -->
+            <div class="win-btn-soft px-3 h-full font-extrabold flex items-center gap-2 text-xs cursor-default opacity-80 select-none">
                 <i class="fa-solid fa-seedling text-emerald-700"></i>
                 <span>Start</span>
-            </button>
+            </div>
 
             <!-- Active Window Tab in Taskbar -->
             <div class="win-inset-soft px-3 h-full text-xs font-extrabold flex items-center gap-2 bg-[#edf3ea] border-b-2 border-emerald-700 text-[#2b3a23]">
@@ -283,102 +323,18 @@
         </div>
     </div>
 
-    <!-- START MENU POPUP -->
-    <div id="start-menu" class="win-soft fixed bottom-14 left-4 md:left-24 w-56 py-2 hidden flex-col z-50 shadow-2xl rounded-2xl bg-[#f0f5ed]">
-        <div class="bg-gradient-to-r from-[#495d3e] to-[#677d5b] text-[#f2f7ef] font-extrabold px-3 py-1.5 text-xs rounded-t-xl flex items-center gap-2 mb-1">
-            <i class="fa-solid fa-leaf"></i> Life of a Lu-ser OS
-        </div>
-        <button onclick="loadPage('home'); toggleStartMenu();" class="px-3 py-2 hover:bg-[#dbe6d5] text-left text-xs font-bold text-[#2b3a23] flex items-center gap-2">
-            <i class="fa-solid fa-house text-emerald-700"></i> Comic Landing Page
-        </button>
-        <button onclick="openBiosModal(); toggleStartMenu();" class="px-3 py-2 hover:bg-[#dbe6d5] text-left text-xs font-bold text-[#2b3a23] flex items-center gap-2">
-            <i class="fa-solid fa-users text-amber-700"></i> Character Bios
-        </button>
-        <button onclick="loadPage('about'); toggleStartMenu();" class="px-3 py-2 hover:bg-[#dbe6d5] text-left text-xs font-bold text-[#2b3a23] flex items-center gap-2">
-            <i class="fa-solid fa-circle-info text-blue-700"></i> Author Lore
-        </button>
-        <div class="border-t border-[#b8c7b2] my-1"></div>
-        <a href="https://github.com" target="_blank" onclick="toggleStartMenu()" class="px-3 py-2 hover:bg-[#dbe6d5] text-left text-xs font-bold text-[#2b3a23] flex items-center gap-2">
-            <i class="fa-brands fa-github text-gray-800"></i> GitHub Repository
-        </a>
-    </div>
-
-    <!-- CHARACTER BIOS MODAL POPUP -->
-    <div id="bios-modal" class="fixed inset-0 bg-black/40 backdrop-blur-xs hidden justify-center items-center z-50 p-4">
-        <div class="win-soft w-full max-w-lg max-h-[85vh] flex flex-col bg-[#eaf0e6] shadow-2xl rounded-2xl overflow-hidden">
-            <div class="win-titlebar-soft px-3 py-2 flex justify-between items-center">
-                <span class="text-xs md:text-sm font-extrabold"><i class="fa-solid fa-users mr-1"></i> Character Bios - Life of a Lu-ser</span>
-                <button onclick="closeBiosModal()" class="w-6 h-6 rounded-full bg-rose-400 text-rose-950 text-xs font-bold flex items-center justify-center">✕</button>
-            </div>
-            <div class="p-4 overflow-y-auto flex flex-col gap-3">
-                
-                <!-- Character 1: My -->
-                <div class="win-inset-soft p-3 bg-white flex gap-3 items-start">
-                    <div class="w-16 h-16 bg-[#e3ebe0] border-2 border-[#829775] flex justify-center items-center rounded-xl shrink-0">
-                        <svg class="w-12 h-12" viewBox="0 0 100 100">
-                            <polygon points="25,35 15,10 40,25" fill="#a78bfa" stroke="#2b3a23" stroke-width="2"/>
-                            <polygon points="75,35 85,10 60,25" fill="#a78bfa" stroke="#2b3a23" stroke-width="2"/>
-                            <circle cx="50" cy="55" r="30" fill="#ddd6fe" stroke="#2b3a23" stroke-width="2"/>
-                            <ellipse cx="40" cy="52" rx="4" ry="7" fill="#2b3a23"/>
-                            <ellipse cx="60" cy="52" rx="4" ry="7" fill="#2b3a23"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="font-extrabold text-[#2b3a23] text-sm">My (マイ) - The Main Lu-ser</div>
-                        <div class="text-[11px] text-gray-500 mb-1">&lt;&lt; Feature: Cat Beanie, Purple Sweater</div>
-                        <p class="text-xs text-gray-700 leading-relaxed">Spends late hours scouring nostalgic forums and digital world archives. Quiet, artistic, and perpetually online.</p>
-                    </div>
-                </div>
-
-                <!-- Character 2: Casey -->
-                <div class="win-inset-soft p-3 bg-white flex gap-3 items-start">
-                    <div class="w-16 h-16 bg-[#dbe8f8] border-2 border-[#60a5fa] flex justify-center items-center rounded-xl shrink-0">
-                        <svg class="w-12 h-12" viewBox="0 0 100 100">
-                            <polygon points="20,30 35,5 45,25" fill="#2563eb" stroke="#2b3a23" stroke-width="2"/>
-                            <polygon points="80,30 65,5 55,25" fill="#2563eb" stroke="#2b3a23" stroke-width="2"/>
-                            <circle cx="50" cy="55" r="30" fill="#93c5fd" stroke="#2b3a23" stroke-width="2"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="font-extrabold text-[#1e3a8a] text-sm">Casey (ケイシ)</div>
-                        <div class="text-[11px] text-gray-500 mb-1">&lt;&lt; Feature: Retro Headset, Chiptune Enthusiast</div>
-                        <p class="text-xs text-gray-700 leading-relaxed">Music junkie cat who loves testing obscure multiplayer server builds and playing noisy synth riffs.</p>
-                    </div>
-                </div>
-
-                <!-- Character 3: Rabbi -->
-                <div class="win-inset-soft p-3 bg-white flex gap-3 items-start">
-                    <div class="w-16 h-16 bg-[#fef3c7] border-2 border-[#f59e0b] flex justify-center items-center rounded-xl shrink-0">
-                        <svg class="w-12 h-12" viewBox="0 0 100 100">
-                            <ellipse cx="35" cy="25" rx="8" ry="20" fill="#fb923c" stroke="#2b3a23" stroke-width="2"/>
-                            <ellipse cx="65" cy="25" rx="8" ry="20" fill="#fb923c" stroke="#2b3a23" stroke-width="2"/>
-                            <circle cx="50" cy="58" r="28" fill="#ffedd5" stroke="#2b3a23" stroke-width="2"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="font-extrabold text-[#78350f] text-sm">Rabbi (ラビ)</div>
-                        <div class="text-[11px] text-gray-500 mb-1">&lt;&lt; Feature: Green Dungarees, Bunny Ears</div>
-                        <p class="text-xs text-gray-700 leading-relaxed">Friendly gardener who grows low-poly vegetables in virtual park worlds. Keeps the group cheerful!</p>
-                    </div>
-                </div>
-
-            </div>
-            <div class="p-3 bg-[#d4e0cd] border-t border-[#a8b89e] text-right">
-                <button onclick="closeBiosModal()" class="win-btn-soft px-4 py-1.5 text-xs font-bold">Close Bios</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- TOAST NOTIFICATION -->
-    <div id="toast" class="fixed top-6 right-6 bg-[#fefae0] text-[#2b3a23] px-4 py-2 text-xs font-bold rounded-xl hidden z-50 shadow-lg border-2 border-[#ccd5ae]">
-        <span id="toast-msg">Notification</span>
-    </div>
-
     <!-- CRT Screen Overlay Effect -->
     <div class="crt-overlay"></div>
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
+        /*
+         * MULTI-FILE URL ROUTING HELPERS:
+         * To separate chapters into dedicated .html files (e.g. index.html, ch1.html, ch2.html, ch3.html, bios.html):
+         * 1. You can replace loadPage('ch1') with direct HTML link navigation: `window.location.href = 'ch1.html';`
+         * 2. In each standalone file (ch1.html, ch2.html, bios.html), simply set `currentChapterKey` to match that specific page.
+         */
+
         // WEBCOMIC CHAPTER & PAGE DATA STRUCTURE
         const COMIC_DATA = {
             home: {
@@ -386,9 +342,14 @@
                 url: "github.com/life-of-a-lu-ser/webcomic",
                 type: "landing"
             },
+            bios: {
+                title: "Character Bios & Archives",
+                url: "github.com/life-of-a-lu-ser/webcomic/bios.html",
+                type: "bios"
+            },
             ch1: {
                 title: "Chapter 1: Day in the Life",
-                url: "github.com/life-of-a-lu-ser/webcomic/ch1",
+                url: "github.com/life-of-a-lu-ser/webcomic/ch1.html",
                 type: "comic",
                 pages: [
                     {
@@ -405,87 +366,7 @@
                         bg: "from-[#e2ebd9] to-[#c5d8ba]",
                         svgType: "ch1_p2"
                     },
-                    {
-                        num: 3,
-                        title: "Page 3: The Odd Discovery",
-                        dialogue: "Rabbi: 'Look look! A strange low-poly glowing acorn sprouted near the fountain!'",
-                        bg: "from-[#fefae0] to-[#e9edc9]",
-                        svgType: "ch1_p3"
-                    }
-                ]
-            },
-            ch2: {
-                title: "Chapter 2: The Glitch Incident",
-                url: "github.com/life-of-a-lu-ser/webcomic/ch2",
-                type: "comic",
-                pages: [
-                    {
-                        num: 1,
-                        title: "Page 1: Pixel Chaos",
-                        dialogue: "My: 'Wait, why are all the textures turning into soft pastel squares?'",
-                        bg: "from-[#faedcd] to-[#f4a261]",
-                        svgType: "ch2_p1"
-                    },
-                    {
-                        num: 2,
-                        title: "Page 2: Debugging",
-                        dialogue: "Casey: 'It's a nostalgic code loop! Quick, grab the missing script file before server reset!'",
-                        bg: "from-[#e8e8e4] to-[#d8e2dc]",
-                        svgType: "ch2_p2"
-                    }
-                ]
-            },
-            ch3: {
-                title: "Chapter 3: Cyber Midnight",
-                url: "github.com/life-of-a-lu-ser/webcomic/ch3",
-                type: "comic",
-                pages: [
-                    {
-                        num: 1,
-                        title: "Page 1: Rooftop Stars",
-                        dialogue: "Rabbi: 'The digital sky looks so serene from up here. We're true lu-sers, but at least we're together.'",
-                        bg: "from-[#1d2d1f] to-[#3a4b38]",
-                        svgType: "ch3_p1"
-                    }
-                ]
-            },
-            about: {
-                title: "About Life of a Lu-ser",
-                url: "github.com/life-of-a-lu-ser/webcomic/about",
-                type: "about"
-            }
-        };
-
-        // Application State
-        let currentChapterKey = 'home';
-        let currentPageIdx = 0;
-        let soundEnabled = true;
-
-        // Audio Beep Generator using Web Audio API
-        function playBeep(freq = 550, duration = 0.04) {
-            if (!soundEnabled) return;
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.value = freq;
-                gain.gain.setValueAtTime(0.04, ctx.currentTime);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start();
-                osc.stop(ctx.currentTime + duration);
-            } catch(e){}
-        }
-
-        function toggleSound() {
-            soundEnabled = !soundEnabled;
-            const btn = document.getElementById('sound-btn');
-            btn.innerHTML = soundEnabled ? '<i class="fa-solid fa-volume-high"></i>' : '<i class="fa-solid fa-volume-xmark text-rose-600"></i>';
-            showToast(soundEnabled ? "Audio enabled" : "Audio muted");
-        }
-
-        // NAVIGATION & PAGE LOADER
+        // Navigation & Loader Dispatcher
         function loadPage(chapterKey, pageIndex = 0) {
             playBeep(700, 0.03);
             currentChapterKey = chapterKey;
@@ -508,16 +389,83 @@
 
             if (chapter.type === 'landing') {
                 renderLandingPage(display);
+            } else if (chapter.type === 'bios') {
+                renderBiosPage(display);
             } else if (chapter.type === 'comic') {
                 renderComicPage(display, chapter, pageIndex);
-            } else if (chapter.type === 'about') {
-                renderAboutPage(display);
             }
         }
 
-        function reloadCurrentPage() {
-            loadPage(currentChapterKey, currentPageIdx);
-            showToast("Page refreshed!");
+        // RENDER IN-PAGE CHARACTER BIOS
+        function renderBiosPage(container) {
+            container.innerHTML = `
+                <div class="bg-white p-4 rounded-2xl border-2 border-[#b8c7b2] shadow-sm flex flex-col gap-4">
+                    <div class="border-b-2 border-[#e3ece0] pb-2 flex justify-between items-center">
+                        <h1 class="text-base md:text-lg font-extrabold text-[#2b3a23] flex items-center gap-2">
+                            <i class="fa-solid fa-users text-emerald-600"></i> Character Bios & Roster
+                        </h1>
+                        <span class="text-xs bg-[#627756] text-white font-bold px-2.5 py-0.5 rounded-full">3 Main Cast</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-3">
+                        <!-- Character 1: My -->
+                        <div class="win-inset-soft p-3 bg-[#fbfdfa] flex flex-col sm:flex-row gap-3 items-center sm:items-start border border-[#a8b89e]">
+                            <div class="w-20 h-20 bg-[#e3ebe0] border-2 border-[#829775] flex justify-center items-center rounded-2xl shrink-0">
+                                <svg class="w-14 h-14" viewBox="0 0 100 100">
+                                    <polygon points="25,35 15,10 40,25" fill="#a78bfa" stroke="#2b3a23" stroke-width="2"/>
+                                    <polygon points="75,35 85,10 60,25" fill="#a78bfa" stroke="#2b3a23" stroke-width="2"/>
+                                    <circle cx="50" cy="55" r="30" fill="#ddd6fe" stroke="#2b3a23" stroke-width="2"/>
+                                    <ellipse cx="40" cy="52" rx="4" ry="7" fill="#2b3a23"/>
+                                    <ellipse cx="60" cy="52" rx="4" ry="7" fill="#2b3a23"/>
+                                </svg>
+                            </div>
+                            <div class="text-center sm:text-left flex-1">
+                                <div class="font-extrabold text-[#2b3a23] text-sm md:text-base">My (マイ) - The Main Lu-ser</div>
+                                <div class="text-[11px] text-purple-700 font-bold mb-1">&lt;&lt; Feature: Cat Beanie, Purple Sweater</div>
+                                <p class="text-xs text-gray-700 leading-relaxed">Spends late hours scouring nostalgic forums and digital world archives. Quiet, artistic, perpetually online, and prone to encountering strange glitches.</p>
+                            </div>
+                        </div>
+
+                        <!-- Character 2: Casey -->
+                        <div class="win-inset-soft p-3 bg-[#fbfdfa] flex flex-col sm:flex-row gap-3 items-center sm:items-start border border-[#a8b89e]">
+                            <div class="w-20 h-20 bg-[#dbe8f8] border-2 border-[#60a5fa] flex justify-center items-center rounded-2xl shrink-0">
+                                <svg class="w-14 h-14" viewBox="0 0 100 100">
+                                    <polygon points="20,30 35,5 45,25" fill="#2563eb" stroke="#2b3a23" stroke-width="2"/>
+                                    <polygon points="80,30 65,5 55,25" fill="#2563eb" stroke="#2b3a23" stroke-width="2"/>
+                                    <circle cx="50" cy="55" r="30" fill="#93c5fd" stroke="#2b3a23" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div class="text-center sm:text-left flex-1">
+                                <div class="font-extrabold text-[#1e3a8a] text-sm md:text-base">Casey (ケイシ)</div>
+                                <div class="text-[11px] text-blue-700 font-bold mb-1">&lt;&lt; Feature: Retro Headset, Chiptune Enthusiast</div>
+                                <p class="text-xs text-gray-700 leading-relaxed">Music junkie cat who loves testing obscure multiplayer server builds, finding secret rooms, and playing noisy synth riffs.</p>
+                            </div>
+                        </div>
+
+                        <!-- Character 3: Rabbi -->
+                        <div class="win-inset-soft p-3 bg-[#fbfdfa] flex flex-col sm:flex-row gap-3 items-center sm:items-start border border-[#a8b89e]">
+                            <div class="w-20 h-20 bg-[#fef3c7] border-2 border-[#f59e0b] flex justify-center items-center rounded-2xl shrink-0">
+                                <svg class="w-14 h-14" viewBox="0 0 100 100">
+                                    <ellipse cx="35" cy="25" rx="8" ry="20" fill="#fb923c" stroke="#2b3a23" stroke-width="2"/>
+                                    <ellipse cx="65" cy="25" rx="8" ry="20" fill="#fb923c" stroke="#2b3a23" stroke-width="2"/>
+                                    <circle cx="50" cy="58" r="28" fill="#ffedd5" stroke="#2b3a23" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div class="text-center sm:text-left flex-1">
+                                <div class="font-extrabold text-[#78350f] text-sm md:text-base">Rabbi (ラビ)</div>
+                                <div class="text-[11px] text-amber-700 font-bold mb-1">&lt;&lt; Feature: Green Dungarees, Bunny Ears</div>
+                                <p class="text-xs text-gray-700 leading-relaxed">Friendly gardener who grows low-poly digital vegetables in virtual park worlds. Keeps the group optimistic through dark encounters.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-2 text-center">
+                        <button onclick="loadPage('ch1')" class="win-btn-soft px-5 py-2 bg-[#627756] text-white font-extrabold text-xs rounded-xl">
+                            <i class="fa-solid fa-book-open mr-1"></i> Return to Chapter 1
+                        </button>
+                    </div>
+                </div>
+            `;
         }
 
         // RENDER LANDING PAGE WITH HEADER TEASER / TRAILER BANNER
@@ -526,18 +474,14 @@
                 <!-- TOP HEADER TEASER / TRAILER BANNER -->
                 <div class="bg-gradient-to-r from-[#495d3e] via-[#5b724f] to-[#718864] text-white p-3 md:p-4 rounded-2xl shadow-md border-2 border-[#3d4f33] mb-4 flex flex-col md:flex-row items-center gap-4">
                     <div class="w-full md:w-1/3 bg-[#3a4b32]/60 p-2 rounded-xl border border-[#8da482] flex flex-col items-center">
-                        <!-- Animated Teaser Canvas Graphic -->
                         <svg class="w-full h-32 rounded-lg" viewBox="0 0 260 140">
                             <rect width="260" height="140" fill="#2d3c28" rx="8"/>
-                            <!-- Starry Night Sky -->
                             <circle cx="30" cy="25" r="2" fill="#fff" opacity="0.8"/>
                             <circle cx="90" cy="15" r="2.5" fill="#fff" opacity="0.9"/>
                             <circle cx="180" cy="35" r="2" fill="#fff" opacity="0.7"/>
                             <circle cx="230" cy="20" r="3" fill="#ffd166"/>
-                            <!-- Hills -->
                             <path d="M0,100 Q80,60 160,95 T260,85 L260,140 L0,140 Z" fill="#4a5d41"/>
                             <path d="M100,110 Q180,80 260,105 L260,140 L100,140 Z" fill="#3a4b32"/>
-                            <!-- Glowing Teaser Text in Canvas -->
                             <rect x="40" y="40" width="180" height="36" fill="#fefae0" rx="18" stroke="#2b3a23" stroke-width="2"/>
                             <text x="130" y="62" fill="#e07a5f" font-family="sans-serif" font-weight="900" font-size="13" text-anchor="middle">★ TEASER: LATEST CHAPTER ★</text>
                         </svg>
@@ -589,7 +533,7 @@
 
                     <!-- Direct Launch CTA -->
                     <div class="text-center mt-2">
-                        <button onclick="loadPage('ch1')" class="win-btn-soft px-6 py-2.5 bg-gradient-to-r from-[#627756] to-[#4c6041] text-white font-extrabold text-xs md:text-sm rounded-xl shadow-md hover:brightness-110">
+                        <button onclick="loadPage('ch1')" class="win-btn-soft px-6 py-2.5 bg-gradient-to-r from-[#627756] to-[#4c6041] text-white font-extrabold text-xs md:text-sm rounded-xl hover:brightness-110">
                             <i class="fa-solid fa-book-open mr-1"></i> BEGIN READING CHAPTER 1
                         </button>
                     </div>
@@ -613,29 +557,26 @@
                     </div>
                 </div>
 
-                <!-- COMIC PANEL FRAME (MOBILE + DESKTOP TOUCH TARGETS) -->
-                <div class="relative flex-1 min-h-[300px] bg-gradient-to-br ${page.bg} rounded-2xl border-2 border-[#5c7052] p-4 flex flex-col items-center justify-between shadow-inner select-none overflow-hidden">
+                <!-- COMIC PANEL FRAME -->
+                <div class="relative flex-1 min-h-[300px] bg-gradient-to-br ${page.bg} rounded-2xl border-2 border-[#5c7052] p-4 flex flex-col items-center justify-between select-none overflow-hidden">
                     
-                    <!-- Panel Title Tag -->
                     <div class="text-xs font-extrabold bg-white/90 px-3 py-1 rounded-full border border-[#829775] mb-2 text-[#2b3a23]">
                         ${page.title}
                     </div>
 
-                    <!-- Retro Graphic Graphic Panel -->
                     <div class="w-full flex-1 flex justify-center items-center my-2 cursor-pointer" onclick="nextComicPage()">
                         ${getComicSvgGraphic(page.svgType)}
                     </div>
 
-                    <!-- Dialogue Bubble -->
-                    <div class="w-full bg-white/95 p-3 rounded-xl border-2 border-[#829775] shadow-sm text-xs md:text-sm text-[#2b3a23] font-bold leading-relaxed">
+                    <div class="w-full bg-white/95 p-3 rounded-xl border-2 border-[#829775] text-xs md:text-sm text-[#2b3a23] font-bold leading-relaxed">
                         <i class="fa-solid fa-comment-dots text-emerald-600 mr-1.5"></i> ${page.dialogue}
                     </div>
 
-                    <!-- Touch Overlay Navigation Zones for Mobile Users -->
-                    <div onclick="prevComicPage()" class="absolute left-0 top-0 bottom-12 w-1/4 opacity-0 hover:opacity-10 bg-black/20 flex items-center justify-start pl-2 text-2xl text-white cursor-pointer transition" title="Previous Page (Left Arrow)">
+                    <!-- Touch Navigation Overlay -->
+                    <div onclick="prevComicPage()" class="absolute left-0 top-0 bottom-12 w-1/4 opacity-0 hover:opacity-10 bg-black/20 flex items-center justify-start pl-2 text-2xl text-white cursor-pointer transition">
                         <i class="fa-solid fa-chevron-left"></i>
                     </div>
-                    <div onclick="nextComicPage()" class="absolute right-0 top-0 bottom-12 w-1/4 opacity-0 hover:opacity-10 bg-black/20 flex items-center justify-end pr-2 text-2xl text-white cursor-pointer transition" title="Next Page (Right Arrow)">
+                    <div onclick="nextComicPage()" class="absolute right-0 top-0 bottom-12 w-1/4 opacity-0 hover:opacity-10 bg-black/20 flex items-center justify-end pr-2 text-2xl text-white cursor-pointer transition">
                         <i class="fa-solid fa-chevron-right"></i>
                     </div>
                 </div>
@@ -651,7 +592,6 @@
                         </button>
                     </div>
 
-                    <!-- Jump Page Selection -->
                     <div class="flex items-center gap-1.5 text-xs">
                         <span class="font-bold text-[#2b3a23]">Jump:</span>
                         <select onchange="loadPage('${currentChapterKey}', parseInt(this.value))" class="win-inset-soft px-2 py-1 text-xs bg-white text-[#2b3a23] font-bold">
@@ -729,32 +669,12 @@
             }
         }
 
-        function renderAboutPage(container) {
-            container.innerHTML = `
-                <div class="p-4 bg-white rounded-2xl border-2 border-[#b8c7b2] text-xs md:text-sm text-[#2b3a23] flex flex-col gap-3">
-                    <div class="font-extrabold text-base border-b border-[#e3ece0] pb-2 flex items-center gap-2">
-                        <i class="fa-solid fa-circle-info text-emerald-600"></i> About "Life of a Lu-ser"
-                    </div>
-                    <p class="leading-relaxed">
-                        <b>Life of a Lu-ser</b> is hosted directly via <b>GitHub Pages</b>. It captures the cozy, whimsical aesthetic of late-90s internet spaces with a modern, soft sage-green aesthetic.
-                    </p>
-                    <div class="win-inset-soft p-3 bg-[#f8faf6] flex flex-col gap-1.5">
-                        <div class="font-bold text-[#2b3a23]">Shortcuts & Navigation:</div>
-                        <div>• Press <b>LEFT (←)</b> / <b>RIGHT (→)</b> on your keyboard to flip pages.</div>
-                        <div>• Use the stationary sidebar menu to switch between chapters at any time.</div>
-                    </div>
-                </div>
-            `;
-        }
-
         // PAGE NAVIGATION HELPERS
         function nextComicPage() {
             const chapter = COMIC_DATA[currentChapterKey];
             if (chapter && chapter.type === 'comic') {
                 if (currentPageIdx < chapter.pages.length - 1) {
                     loadPage(currentChapterKey, currentPageIdx + 1);
-                } else {
-                    showToast("End of chapter! Choose another from the sidebar.");
                 }
             }
         }
@@ -772,7 +692,27 @@
             loadPage('home');
         }
 
-        // KEYBOARD EVENT LISTENER (LEFT & RIGHT ARROW KEYS)
+        // CONTENT WARNING GATE ACTIONS
+        function acceptWarningAndEnter() {
+            playBeep(750, 0.04);
+            const warningGate = document.getElementById('content-warning-gate');
+            if (warningGate) {
+                warningGate.style.display = 'none';
+            }
+        }
+
+        function kickUserOut() {
+            playBeep(300, 0.08);
+            // If the user has history to go back to, use history.back()
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                // Otherwise redirect them completely away
+                window.location.href = "https://www.google.com";
+            }
+        }
+
+        // KEYBOARD EVENT LISTENER
         window.addEventListener('keydown', function(e) {
             if (e.key === 'ArrowLeft') {
                 prevComicPage();
@@ -780,33 +720,6 @@
                 nextComicPage();
             }
         });
-
-        // MODALS & START MENU TOGGLES
-        function openBiosModal() {
-            playBeep(650, 0.03);
-            document.getElementById('bios-modal').classList.remove('hidden');
-            document.getElementById('bios-modal').classList.add('flex');
-        }
-
-        function closeBiosModal() {
-            playBeep(450, 0.03);
-            document.getElementById('bios-modal').classList.add('hidden');
-            document.getElementById('bios-modal').classList.remove('flex');
-        }
-
-        function toggleStartMenu() {
-            playBeep(600, 0.03);
-            const menu = document.getElementById('start-menu');
-            menu.classList.toggle('hidden');
-            menu.classList.toggle('flex');
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-msg').innerText = msg;
-            toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.add('hidden'), 2500);
-        }
 
         // Realtime Taskbar Clock
         function updateClock() {
